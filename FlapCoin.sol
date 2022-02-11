@@ -12,16 +12,13 @@ contract FlapCoin is Context, IBEP20, Ownable {
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
-    uint256 private _totalSupply;
-    uint8 public _decimals;
-    string public _symbol;
-    string public _name;
+    uint256 private _totalSupply = 1e8 * 1e18;
+    uint8 public constant _decimals  = 18;
+    string public constant _symbol = "FLAP";
+    string public constant _name = "Flap Coin";
 
     constructor() {
-        _name = "Flap Coin";
-        _symbol = "FLAP";
-        _decimals = 18;
-        _totalSupply = 100000000 * 1e18;
+        _totalSupply;
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -31,15 +28,15 @@ contract FlapCoin is Context, IBEP20, Ownable {
         return owner();
     }
 
-    function decimals() override external view returns (uint8) {
+    function decimals() override external pure returns (uint8) {
         return _decimals;
     }
 
-    function symbol() override external view returns (string memory) {
+    function symbol() override external pure returns (string memory) {
         return _symbol;
     }
 
-    function name() override external view returns (string memory) {
+    function name() override external pure returns (string memory) {
         return _name;
     }
 
@@ -109,10 +106,5 @@ contract FlapCoin is Context, IBEP20, Ownable {
 
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
-    }
-
-    function _burnFrom(address account, uint256 amount) internal {
-        _burn(account, amount);
-        _approve(account, _msgSender(), _allowances[account][_msgSender()].sub(amount, "BEP20: burn amount exceeds allowance"));
     }
 }
